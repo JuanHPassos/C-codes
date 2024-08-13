@@ -11,8 +11,7 @@ Nota-se que a função iterativa ocupa menos memória. Porém, há problemas em 
 
 ### Exemplo: Fatorial
   1. \( n! = n * (n - 1)! \)
-  2. Se \( n = 1 \), então \( fat = 1 \).**(Caso base)**
-  2. Se \( n = 0 \), então \( fat = 1 \).**(Caso base)**
+  2. Se \( n = 1 \), então \( fat = 1 \). Ou Se \( n = 0 \), então \( fat = 1 \).**(Casos base)**
   3. `return n * fat(n - 1);`
 
 ### Outro exemplo: Fibonacci
