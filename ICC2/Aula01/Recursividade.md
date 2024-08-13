@@ -10,10 +10,10 @@ Nota-se que a função iterativa ocupa menos memória. Porém, há problemas em 
 3. A cada chamada recursiva, deve-se garantir que se está mais próximo de satisfazer a condição de término.
 
 ### Exemplo: Fatorial
-1. \( n! = n \times (n - 1)! \)
-2. Se \( n = 1 \), então \( fat = 1 \).
-3. Se \( n = 0 \), então \( fat = 1 \).
-4. `return n * fat(n - 1);`
+1. \( n! = n * (n - 1)! \)
+2. Se \( n = 1 \), então \( fat = 1 \).**(Caso base)**
+2. Se \( n = 0 \), então \( fat = 1 \).**(Caso base)**
+3. `return n * fat(n - 1);`
 
 ### Outro exemplo: Fibonacci
 
