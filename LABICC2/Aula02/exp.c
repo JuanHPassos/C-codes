@@ -1,4 +1,4 @@
-/* Implemente a exponenciação de duas formas: uma iterativa e outra utilizando o método de
+/*Implemente a exponenciação de duas formas: uma iterativa e outra utilizando o método de
  divisão e conquista (exponenciação rápida). Considere que 𝑛 e 𝑘 são dois inteiros, onde 0 <
  𝑛 <104 e 0 < 𝑘 < 109.
  
@@ -19,11 +19,13 @@ int exp(int n,int k){
     if(k == 1){
         return n%10000;
     }
+    //2^8 = 2^4 * 2^4 e 2^9 = 2^4 * 2^4 * 2.
+    int aux = exp(n, k/2)%10000;
     if(k%2){
-        return ((((exp(n, k/2)%10000)*(exp(n, k/2)%10000))%10000)*n);
+        return ((aux*aux)%10000)*n;
     }
     else{
-        return ((exp(n, k/2)%10000)*(exp(n,k/2)%10000));
+        return (aux*aux);
     }
 }
 
