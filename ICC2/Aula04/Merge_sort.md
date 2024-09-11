@@ -85,3 +85,8 @@ void mergeSort(int arr[], int l, int r)
     }
 }
 ```
+
+### Complexidade
+
+Nota-se que o vetor divide-se por 2 até possuir tamanho 1, e a cada nivel tem custo maximo de n.
+Portanto, como a altura da arvore é log n e cada nivel gasta n. A complexidade do algoritmo é n log(n).
