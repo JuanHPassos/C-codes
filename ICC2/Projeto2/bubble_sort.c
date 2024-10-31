@@ -6,8 +6,9 @@ Complexidade: n^2.
 */
 #include<stdio.h>
 #include<stdlib.h>
+#include<time.h>
 
-void bubbleSort(int *vet, int n);
+int bubbleSort(int *vet, int n);
 
 int main(void){
     int n, *vet;
@@ -19,20 +20,39 @@ int main(void){
     for(int i = 0; i < n; i++){
         scanf("%d", &vet[i]);
     }
+    
+    clock_t start, end;
+    double cpu_time_ms;
 
-    bubbleSort(vet, n);
+    start = clock();
+    
+    // Números de trocas
+    int trocas = bubbleSort(vet, n);
+
+    end = clock();
     
     for(int i = 0; i < n; i++){
         printf("%d", vet[i]);
     }
+
+    
+    // Calcular o tempo de execução em milissegundos
+    cpu_time_ms = ((double) (end - start)) / (CLOCKS_PER_SEC / 1000.0);
+
+    printf("\nTempo de execução: %lf ms\n", cpu_time_ms);
+
+    printf("\n Foram realizadas %d trocas.\n", trocas);
+
+
 
     free(vet);
     vet = NULL; // Boa prática.
 
     return 0;
 }
-
-void bubbleSort(int *vet, int n){
+// Retorna o numero de trocas
+int bubbleSort(int *vet, int n){
+    int trocas = 0;
     // Busca reproduzir o processo de eliminar o maior n-1 vezes.
     for(int i = 0; i < n-1; i++){
         int ord = 1;
@@ -44,6 +64,7 @@ void bubbleSort(int *vet, int n){
                 vet[j] = vet[j] + vet[j+1];
                 vet[j+1] = vet[j] - vet[j+1];
                 vet[j] = vet[j] - vet[j+1];
+                trocas++;
                 ord = 0;
             }
         
@@ -51,4 +72,5 @@ void bubbleSort(int *vet, int n){
         // Verifica se o vetor ja esta ordenado
         if(ord) break; 
     }
+    return trocas;
 }

@@ -4,28 +4,45 @@ O algortimo de ordenação shellshort consiste na divisão do vetor em janelas f
 
 #include<stdio.h>
 #include<stdlib.h>
+#include<time.h>
 
-void shellsort(int *vet, int n);
+int shellsort(int *vet, int n);
 
 int main(){
     int n, *vet;
     scanf("%d", &n);
     vet = (int*) malloc(n*sizeof(int));
-    for(int i = 0; i<n; i++){
+    for(int i = 0; i < n; i++){
         scanf("%d", &vet[i]);
     }
-    shellsort(vet, n);
+
+    clock_t start, end;
+    double cpu_time_ms;
+
+    start = clock();
+
+    int trocas = shellsort(vet, n);
+
+    end = clock();
+
     for(int i = 0; i < n; i++){
         printf("%d ", vet[i]);
     }
-    printf("\n");
+
+    // Calcular o tempo de execução em milissegundos
+    cpu_time_ms = ((double) (end - start)) / (CLOCKS_PER_SEC / 1000.0);
+
+    printf("\nTempo de execução: %lf ms\n", cpu_time_ms);
+
+    printf("\n Foram realizadas %d trocas.\n", trocas);
 
     return 0;
 
 
 }
 
-void shellsort(int *vet, int n){
+int shellsort(int *vet, int n){
+    int trocas = 0;
     //Dividir o vetor em janelas.
     for(int janela = n/2; janela > 0; janela /= 2){
         //Formar grupos de i até i+janela, sempre 2 a 2. 
@@ -37,11 +54,13 @@ void shellsort(int *vet, int n){
             //Troca elementos 2 a 2, até estar ordenado.
             for(j = i; j >= janela && troca < vet[j-janela]; j -= janela){
                 vet[j] = vet[j - janela];
+                trocas++; // Troca entre duas variaveis.
             }
             //Caso j tenha sido alterado, houve trocas. Sendo vet[j] nova posicao do numero troca.
             vet[j] = troca;
         }
     }
+    return trocas;
 }
 
 

@@ -1,11 +1,12 @@
 #include<stdio.h>
 #include<stdlib.h>
+#include<time.h>
 
-void conquistar(int *vet, int l, int meio, int r);
-void dividir(int *vet, int l, int r);
+void merge(int *vet, int l, int meio, int r, int *contador);
+void mergesort(int *vet, int l, int r, int *contador);
 
 int main(){
-    int n, *vet = NULL;
+    int n, *vet = NULL, contador = 0;
     scanf("%d", &n);
 
     vet = (int *) malloc(sizeof(int)*n);
@@ -14,15 +15,30 @@ int main(){
         exit(1);
     }
 
-    for(int i = 0; i<n; i++){
+    for(int i = 0; i < n; i++){
         scanf("%d", &vet[i]);
     }
+    
+    clock_t start, end;
+    double cpu_time_ms;
 
-    dividir(vet, 0, n-1);
+    start = clock();
 
-    for(int i = 0; i<n; i++){
+    mergesort(vet, 0, n-1, &contador);
+
+    end = clock();
+    
+    
+    for(int i = 0; i < n; i++){
         printf("%d ", vet[i]);
     }
+
+    // Calcular o tempo de execução em milissegundos
+    cpu_time_ms = ((double) (end - start)) / (CLOCKS_PER_SEC / 1000.0);
+
+    printf("\nTempo de execução: %lf ms\n", cpu_time_ms);
+
+    printf("\n Foram realizadas %d trocas.\n", contador);
 
     free(vet);
     vet = NULL;
@@ -30,19 +46,19 @@ int main(){
     return 0;
 }
 
-void dividir(int *vet, int l, int r){
+void mergesort(int *vet, int l, int r, int *contador){
     if(l<r){
         int meio = (l+r)/2;
 
-        dividir(vet, l, meio);
-        dividir(vet, meio+1, r);
+        mergesort(vet, l, meio, contador);
+        mergesort(vet, meio+1, r, contador);
 
-        conquistar(vet, l, meio, r);
+        merge(vet, l, meio, r, contador);
 
     }
 }
 
-void conquistar(int *vet, int l, int meio, int r){
+void merge(int *vet, int l, int meio, int r, int *contador){
     int tam1 = meio-l+1;
     int tam2 = r-meio;
 
@@ -67,6 +83,7 @@ void conquistar(int *vet, int l, int meio, int r){
         else{
             vet[posVet] = R[posR];
             posR++;
+            (*contador)++;
         }
         posVet++;
     }

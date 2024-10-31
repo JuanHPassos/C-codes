@@ -3,38 +3,53 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
+#include<time.h>
 
-void cont_menor(int *vet,int n);
+int cont_menor(int *vet,int n);
 
 int main(){
-    int n, *vet;
+    int n;
 
     scanf("%d", &n);
 
-    vet = (int*) malloc(n*sizeof(int));
+    int *vet = (int*) malloc(n*sizeof(int));
 
-    for(int i = 0; i<n; i++){
+    for(int i = 0; i < n; i++){
         scanf("%d", &vet[i]);
     }
+    
+    clock_t start, end;
+    double cpu_time_ms;
 
-    cont_menor(vet, n);
+    start = clock();
 
+    int contador_trocas = cont_menor(vet, n);    
+
+    end = clock();
+    
+    
     for(int i = 0; i < n; i++){
         printf("%d ", vet[i]);
     }
 
-    printf("\n");
+    // Calcular o tempo de execução em milissegundos.
+    cpu_time_ms = ((double) (end - start)) / (CLOCKS_PER_SEC / 1000.0);
+
+    printf("\nTempo de execução: %lf ms\n", cpu_time_ms);
+
+    printf("\n Foram realizadas %d trocas.\n", contador_trocas);
 
     free(vet);
-    vet = NULL; // Boa prática.
+    vet = NULL;
 
     return 0;
 
 }
 
 // Ordena o vetor pelo metodo de contagem de menores.
-void cont_menor(int *vet,int n){
-    int *x = (int*) malloc(n*sizeof(int)); // x = vetor quant_menores
+int cont_menor(int *vet,int n){
+    int contador_trocas = 0;
+    int *x = (int*) malloc(n*sizeof(int)); // x = vetor quant_menores.
     int *b = (int*) malloc(n*sizeof(int)); // Vetor para depositar após ordernar.
     memset(x, 0, n*sizeof(int));
     // Conta elementos menores
@@ -46,9 +61,10 @@ void cont_menor(int *vet,int n){
             else x[i]++;
         }
     }
-    // Ordena em um vetor auxiliar
+    // Ordena em um vetor auxiliar.
     for(int i = 0; i < n; i++){
         b[x[i]] = vet[i];
+        contador_trocas++; // Movimentação no vetor(troca).
     }
     // Copia para o vetor resposta.
     memcpy(vet, b, n*sizeof(int));
@@ -57,4 +73,6 @@ void cont_menor(int *vet,int n){
     free(x);
     b = NULL;
     x = NULL;
+
+    return contador_trocas;
 }

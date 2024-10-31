@@ -12,9 +12,10 @@ Exemplo:
 */
 #include<stdio.h>
 #include<stdlib.h>
+#include<time.h>
 
 // Modularização.
-void selectionsort(int *vet, int n);
+int selectionsort(int *vet, int n);
 
 int main(){
     int n, *vet;
@@ -23,11 +24,26 @@ int main(){
     for(int i = 0; i<n; i++){
         scanf("%d", &vet[i]);
     }
-    selectionsort(vet, n);
+
+    clock_t start, end;
+    double cpu_time_ms;
+
+    start = clock();
+
+    int trocas = selectionsort(vet, n);
+
+    end = clock();
+    
     for(int i = 0; i < n; i++){
         printf("%d ", vet[i]);
     }
-    printf("\n");
+    
+    // Calcular o tempo de execução em milissegundos
+    cpu_time_ms = ((double) (end - start)) / (CLOCKS_PER_SEC / 1000.0);
+
+    printf("\nTempo de execução: %lf ms\n", cpu_time_ms);
+
+    printf("\n Foram realizadas %d trocas.\n", trocas);
 
     free(vet);
     vet = NULL; // Boa prática.
@@ -35,7 +51,8 @@ int main(){
     return 0;
 }
 
-void selectionsort(int *vet, int n){
+int selectionsort(int *vet, int n){
+    int trocas = 0; // Guarda quantidade de trocas.
     for(int i = 0; i < n-1; i++){
         int menor = i; // Inicio do vetor nao ordenado.
         for(int j = i+1; j < n; j++){
@@ -48,6 +65,7 @@ void selectionsort(int *vet, int n){
             int aux = vet[i];
             vet[i] = vet[menor];
             vet[menor] = aux;
+            trocas++;
         }
     }
 }

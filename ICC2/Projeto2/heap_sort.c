@@ -57,24 +57,43 @@ vetor (1)(3)(4)(5)(10)
 
 #include<stdio.h>
 #include<stdlib.h>
+#include<time.h>
 
 // Modularização.
 void swap(int *i, int *j);
-void rearranjar_heap(int *vet, int i, int tam_heap);
-void heapsort(int *vet, int n);
+void rearranjar_heap(int *vet, int i, int tam_heap, int *contadorTrocas);
+void heapsort(int *vet, int n, int *contadorTrocas);
 
 int main(){
     int n, *vet;
     scanf("%d", &n);
     vet = (int*) malloc(n*sizeof(int));
+
     for(int i = 0; i<n; i++){
         scanf("%d", &vet[i]);
     }
-    heapsort(vet, n);
+
+    clock_t start, end;
+    double cpu_time_ms;
+
+    start = clock();
+
+    int contadorTrocas = 0;
+    heapsort(vet, n, &contadorTrocas);
+
+    end = clock();
+
     for(int i = 0; i < n; i++){
         printf("%d ", vet[i]);
     }
     printf("\n");
+    
+    // Calcular o tempo de execução em milissegundos
+    cpu_time_ms = ((double) (end - start)) / (CLOCKS_PER_SEC / 1000.0);
+
+    printf("\nTempo de execução: %lf ms\n", cpu_time_ms);
+
+    printf("\n Foram realizadas %d trocas.\n", contadorTrocas);
 
     free(vet);
     vet = NULL; // Evita ponteiro selvagem.
@@ -89,7 +108,7 @@ void swap(int *i, int *j){
     *j = aux; 
 }
 
-void rearranjar_heap(int *vet, int i, int tam_heap){
+void rearranjar_heap(int *vet, int i, int tam_heap, int *contadorTrocas){
     int esq, dir, maior;
 
     esq = 2*i + 1;
@@ -105,17 +124,17 @@ void rearranjar_heap(int *vet, int i, int tam_heap){
     if(maior != i){
         
         swap(&vet[maior], &vet[i]);
-
-        rearranjar_heap(vet, maior, tam_heap);
+        (*contadorTrocas)++;
+        rearranjar_heap(vet, maior, tam_heap, contadorTrocas);
 
     }
 }
 
-void heapsort(int *vet, int n){
+void heapsort(int *vet, int n, int *contadorTrocas){
     int i;
     // Começa em (n/2) - 1, pois a partir disso, são representadas as folhas das arvore binaria.
     for(i = (n / 2) - 1; i >= 0; i--){
-        rearranjar_heap(vet, i, n);
+        rearranjar_heap(vet, i, n, contadorTrocas);
     }
 
     
@@ -123,7 +142,8 @@ void heapsort(int *vet, int n){
     for (int i = n - 1; i >= 0; i--) {
 
         swap(&vet[0], &vet[i]);
+        (*contadorTrocas)++;
 
-        rearranjar_heap(vet, 0, i);
+        rearranjar_heap(vet, 0, i, contadorTrocas);
     }
 }
