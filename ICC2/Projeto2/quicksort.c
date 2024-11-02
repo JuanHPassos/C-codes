@@ -50,25 +50,24 @@ int main(){
 
 // Particao hoares
 int particao(int *vet, int l, int r, int *contadorTrocas){
-    int pivo = mediana(vet[l], vet[(l+r)/2], vet[r]);
-
+    // int pivo = mediana(vet[l], vet[(l+r)/2], vet[r]);
+    int pivo = vet[r];
     while(l < r){
         // Busca primeiro elemento a esquerda maior ou igual a pivo.
         while(vet[l] < pivo) l++;
         // Busca primeiro elemento a direita menor ou igual a pivo.
         while(vet[r] > pivo) r--;
        
-       // Se l e r ainda não se cruzaram, trocamos os elementos.
-        if (l < r) {
-            // Troca os elementos encontrados.
-            int temp = vet[r];
-            vet[r] = vet[l];
-            vet[l] = temp;
-            (*contadorTrocas)++; // Incrementa o contador de trocas
-        }
+       if(l >= r) return r;
+        // Se l e r ainda não se cruzaram, trocamos os elementos.
+        // Troca os elementos encontrados.
+       int temp = vet[r];
+       vet[r] = vet[l];
+       vet[l] = temp;
+       (*contadorTrocas)++; // Incrementa o contador de trocas
     }
     // Retorna a posicao correta do pivo.
-    return l; 
+    return r; 
 
 }
 
@@ -78,8 +77,8 @@ void quicksort(int *vet,int l,int r, int *contadorTrocas){
         // Busca achar a posicao correta do pivo, retorna sua posicao.
         int pivo = particao(vet, l, r, contadorTrocas);
         // Quebra o vetor em dois.
-        quicksort(vet, l, pivo, contadorTrocas);
-        quicksort(vet, pivo+1, r, contadorTrocas);
+        quicksort(vet, l, pivo - 1, contadorTrocas);
+        quicksort(vet, pivo + 1, r, contadorTrocas);
 
     }
 }

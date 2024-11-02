@@ -6,7 +6,12 @@ O algortimo de ordenação shellshort consiste na divisão do vetor em janelas f
 #include<stdlib.h>
 #include<time.h>
 
-int shellsort(int *vet, int n);
+typedef struct quantidades_{
+    int contadorTrocas;
+    int contadorComparacoes;
+}QUANTIDADES;
+
+void shellsort(int *vet, int n, QUANTIDADES *quantidades);
 
 int main(){
     int n, *vet;
@@ -21,7 +26,12 @@ int main(){
 
     start = clock();
 
-    int trocas = shellsort(vet, n);
+    // Calcular quantidade de trocas e comparacoes.
+    QUANTIDADES quantidades;
+    quantidades.contadorComparacoes = 0;
+    quantidades.contadorTrocas = 0;
+
+    shellsort(vet, n, &quantidades);
 
     end = clock();
 
@@ -34,15 +44,14 @@ int main(){
 
     printf("\nTempo de execução: %lf ms\n", cpu_time_ms);
 
-    printf("\n Foram realizadas %d trocas.\n", trocas);
+    printf("\n Foram realizadas: %d comparacoes e %d trocas.\n", 
+           quantidades.contadorComparacoes, quantidades.contadorTrocas);
 
     return 0;
 
-
 }
 
-int shellsort(int *vet, int n){
-    int trocas = 0;
+void shellsort(int *vet, int n, QUANTIDADES *quantidades){
     //Dividir o vetor em janelas.
     for(int janela = n/2; janela > 0; janela /= 2){
         //Formar grupos de i até i+janela, sempre 2 a 2. 
@@ -51,16 +60,19 @@ int shellsort(int *vet, int n){
             int troca = vet[i];
             //Index da posição final do vet[i] apos a troca.
             int j;
+            quantidades->contadorComparacoes++; // Primeira comparação.
             //Troca elementos 2 a 2, até estar ordenado.
             for(j = i; j >= janela && troca < vet[j-janela]; j -= janela){
+                // Garante que a comparação de saída seja contada.
+                quantidades->contadorComparacoes++;
                 vet[j] = vet[j - janela];
-                trocas++; // Troca entre duas variaveis.
+                quantidades->contadorTrocas++; // Troca entre duas variaveis.
             }
             //Caso j tenha sido alterado, houve trocas. Sendo vet[j] nova posicao do numero troca.
             vet[j] = troca;
         }
     }
-    return trocas;
+    return;
 }
 
 

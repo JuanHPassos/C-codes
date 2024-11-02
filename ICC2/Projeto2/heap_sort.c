@@ -59,10 +59,15 @@ vetor (1)(3)(4)(5)(10)
 #include<stdlib.h>
 #include<time.h>
 
+typedef struct quantidades_{
+    int contadorTrocas;
+    int contadorComparacoes;
+}QUANTIDADES;
+
 // Modularização.
 void swap(int *i, int *j);
-void rearranjar_heap(int *vet, int i, int tam_heap, int *contadorTrocas);
-void heapsort(int *vet, int n, int *contadorTrocas);
+void rearranjar_heap(int *vet, int i, int tam_heap, QUANTIDADES *quantidades);
+void heapsort(int *vet, int n, QUANTIDADES *quantidades);
 
 int main(){
     int n, *vet;
@@ -77,9 +82,13 @@ int main(){
     double cpu_time_ms;
 
     start = clock();
+    
+    // Calcular quantidade de trocas e comparacoes.
+    QUANTIDADES quantidades;
+    quantidades.contadorComparacoes = 0;
+    quantidades.contadorTrocas = 0;
 
-    int contadorTrocas = 0;
-    heapsort(vet, n, &contadorTrocas);
+    heapsort(vet, n, &quantidades);
 
     end = clock();
 
@@ -93,7 +102,8 @@ int main(){
 
     printf("\nTempo de execução: %lf ms\n", cpu_time_ms);
 
-    printf("\n Foram realizadas %d trocas.\n", contadorTrocas);
+    printf("\n Foram realizadas: %d comparacoes e %d trocas.\n", 
+           quantidades.contadorComparacoes, quantidades.contadorTrocas);
 
     free(vet);
     vet = NULL; // Evita ponteiro selvagem.
@@ -108,42 +118,42 @@ void swap(int *i, int *j){
     *j = aux; 
 }
 
-void rearranjar_heap(int *vet, int i, int tam_heap, int *contadorTrocas){
+void rearranjar_heap(int *vet, int i, int tam_heap, QUANTIDADES *quantidades){
     int esq, dir, maior;
 
     esq = 2*i + 1;
     dir = 2*i + 2;
     maior = i;
 
+    quantidades->contadorComparacoes++;
     if(esq < tam_heap && vet[esq] > vet[maior])
         maior = esq;
     
+    quantidades->contadorComparacoes++;
     if(dir < tam_heap && vet[dir] > vet[maior])
         maior = dir;
 
     if(maior != i){
         
         swap(&vet[maior], &vet[i]);
-        (*contadorTrocas)++;
-        rearranjar_heap(vet, maior, tam_heap, contadorTrocas);
-
+        (quantidades->contadorTrocas)++;
+        rearranjar_heap(vet, maior, tam_heap, quantidades);
     }
 }
 
-void heapsort(int *vet, int n, int *contadorTrocas){
+void heapsort(int *vet, int n, QUANTIDADES *quantidades){
     int i;
     // Começa em (n/2) - 1, pois a partir disso, são representadas as folhas das arvore binaria.
     for(i = (n / 2) - 1; i >= 0; i--){
-        rearranjar_heap(vet, i, n, contadorTrocas);
+        rearranjar_heap(vet, i, n, quantidades);
     }
-
     
     // Heap sort
     for (int i = n - 1; i >= 0; i--) {
 
         swap(&vet[0], &vet[i]);
-        (*contadorTrocas)++;
+        (quantidades->contadorTrocas)++;
 
-        rearranjar_heap(vet, 0, i, contadorTrocas);
+        rearranjar_heap(vet, 0, i, quantidades);
     }
 }

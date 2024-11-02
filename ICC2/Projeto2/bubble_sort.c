@@ -8,14 +8,20 @@ Complexidade: n^2.
 #include<stdlib.h>
 #include<time.h>
 
-int bubbleSort(int *vet, int n);
+typedef struct quantidades_{
+    int contadorTrocas;
+    int contadorComparacoes;
+}QUANTIDADES;
+
+
+void bubbleSort(int *vet, int n, QUANTIDADES *quantidades);
 
 int main(void){
-    int n, *vet;
+    int n;
 
     scanf("%d", &n);
 
-    vet = (int*) malloc(n*sizeof(int));
+    int *vet = (int*) malloc(n*sizeof(int));
 
     for(int i = 0; i < n; i++){
         scanf("%d", &vet[i]);
@@ -26,45 +32,49 @@ int main(void){
 
     start = clock();
     
+    // Calcular quantidade de trocas e comparacoes.
+    QUANTIDADES quantidades;
+    quantidades.contadorComparacoes = 0;
+    quantidades.contadorTrocas = 0;
+
     // Números de trocas
-    int trocas = bubbleSort(vet, n);
+    bubbleSort(vet, n, &quantidades);
 
     end = clock();
     
     for(int i = 0; i < n; i++){
-        printf("%d", vet[i]);
+        printf("%d ", vet[i]);
     }
 
     
     // Calcular o tempo de execução em milissegundos
     cpu_time_ms = ((double) (end - start)) / (CLOCKS_PER_SEC / 1000.0);
 
-    printf("\nTempo de execução: %lf ms\n", cpu_time_ms);
+    printf("\nTempo de execucao: %lf ms\n", cpu_time_ms);
 
-    printf("\n Foram realizadas %d trocas.\n", trocas);
-
-
+    printf("Foram realizadas: %d comparacoes e %d trocas.\n", 
+           quantidades.contadorComparacoes, quantidades.contadorTrocas);
 
     free(vet);
     vet = NULL; // Boa prática.
 
     return 0;
 }
+
 // Retorna o numero de trocas
-int bubbleSort(int *vet, int n){
-    int trocas = 0;
+void bubbleSort(int *vet, int n, QUANTIDADES *quantidades){
     // Busca reproduzir o processo de eliminar o maior n-1 vezes.
     for(int i = 0; i < n-1; i++){
         int ord = 1;
         // Pega o maior elemento e joga para o final.
         for(int j = 0; j < n-i-1; j++){
-            
+            (quantidades->contadorComparacoes)++;
             if(vet[j] > vet[j+1]){
                 // Swap de duas variaveis
                 vet[j] = vet[j] + vet[j+1];
                 vet[j+1] = vet[j] - vet[j+1];
                 vet[j] = vet[j] - vet[j+1];
-                trocas++;
+                quantidades->contadorTrocas++;
                 ord = 0;
             }
         
@@ -72,5 +82,5 @@ int bubbleSort(int *vet, int n){
         // Verifica se o vetor ja esta ordenado
         if(ord) break; 
     }
-    return trocas;
+    return;
 }

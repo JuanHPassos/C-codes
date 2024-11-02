@@ -2,6 +2,15 @@
 #include<stdlib.h>
 #include<time.h>
 
+typedef struct quantidades_{
+    int contadorTrocas;
+    int contadorComparacoes;
+}QUANTIDADES;
+
+// Moduçarização
+int getMax(int arr[], int n);
+void countSort(int *arr, int n, int exp, QUANTIDADES *quantidades);
+
 // Função utilitária para obter o valor máximo em arr[]
 int getMax(int arr[], int n) {
     int mx = arr[0];
@@ -13,7 +22,7 @@ int getMax(int arr[], int n) {
 
 // Função para realizar o Counting Sort em arr[]
 // de acordo com o dígito representado por exp
-void countSort(int *arr, int n, int exp, int *contador) {
+void countSort(int *arr, int n, int exp, QUANTIDADES *quantidades) {
     int *output = (int*) malloc(n*sizeof(int)); // Array de saída
     int *count = (int*) calloc(10, sizeof(int)); // Inicializa o array de contagem como 0
 
@@ -28,9 +37,8 @@ void countSort(int *arr, int n, int exp, int *contador) {
 
     // Constrói o array de saída
     for (int i = n - 1; i >= 0; i--) {
-        output[count[(arr[i] / exp) % 10] - 1] = arr[i];
+        output[count[(arr[i] / exp) % 10] - 1];
         count[(arr[i] / exp) % 10]--;
-        (*contador)++; // Conta "trocas"(movimentação no array)
     }
 
     // Copia o array de saída para arr[],
@@ -38,7 +46,7 @@ void countSort(int *arr, int n, int exp, int *contador) {
     // de acordo com o dígito atual
     for (int i = 0; i < n; i++){
         arr[i] = output[i];
-        (*contador)++; // Conta "trocas"(movimentação no array)
+        (quantidades->contadorTrocas)++; // Conta "trocas"(movimentação no array)
     }
 }
 
@@ -75,7 +83,12 @@ int main() {
 
     start = clock();
 
-    radixSort(vet, n, &contador);
+    // Calcular quantidade de trocas e comparacoes.
+    QUANTIDADES quantidades;
+    quantidades.contadorComparacoes = 0;
+    quantidades.contadorTrocas = 0;
+
+    radixSort(vet, n, &quantidades);
 
     end = clock();
     
@@ -89,7 +102,8 @@ int main() {
 
     printf("\nTempo de execução: %lf ms\n", cpu_time_ms);
 
-    printf("\n Foram realizadas %d trocas.\n", contador);
+    printf("\n Foram realizadas: %d comparacoes e %d trocas.\n", 
+           quantidades.contadorComparacoes, quantidades.contadorTrocas);
 
     free(vet);
     vet = NULL;

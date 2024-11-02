@@ -5,7 +5,12 @@
 #include<string.h>
 #include<time.h>
 
-int cont_menor(int *vet,int n);
+typedef struct quantidades_{
+    int contadorTrocas;
+    int contadorComparacoes;
+}QUANTIDADES;
+
+void cont_menor(int *vet,int n, QUANTIDADES *quantidades);
 
 int main(){
     int n;
@@ -23,10 +28,14 @@ int main(){
 
     start = clock();
 
-    int contador_trocas = cont_menor(vet, n);    
+    // Calcular quantidade de trocas e comparacoes.
+    QUANTIDADES quantidades;
+    quantidades.contadorComparacoes = 0;
+    quantidades.contadorTrocas = 0;
+
+    cont_menor(vet, n, &quantidades);    
 
     end = clock();
-    
     
     for(int i = 0; i < n; i++){
         printf("%d ", vet[i]);
@@ -37,7 +46,8 @@ int main(){
 
     printf("\nTempo de execução: %lf ms\n", cpu_time_ms);
 
-    printf("\n Foram realizadas %d trocas.\n", contador_trocas);
+    printf("\n Foram realizadas: %d comparacoes e %d trocas.\n", 
+           quantidades.contadorComparacoes, quantidades.contadorTrocas);
 
     free(vet);
     vet = NULL;
@@ -47,14 +57,14 @@ int main(){
 }
 
 // Ordena o vetor pelo metodo de contagem de menores.
-int cont_menor(int *vet,int n){
-    int contador_trocas = 0;
+void cont_menor(int *vet,int n, QUANTIDADES *quantidades){
     int *x = (int*) malloc(n*sizeof(int)); // x = vetor quant_menores.
     int *b = (int*) malloc(n*sizeof(int)); // Vetor para depositar após ordernar.
     memset(x, 0, n*sizeof(int));
     // Conta elementos menores
     for(int i = 0; i < n-1; i++){
         for(int j = i+1; j < n; j++){
+            (quantidades->contadorComparacoes)++; // Conta comparações 2 elementos.
             if(vet[i] <= vet[j]){ // Para decrescente basta, trocar o menor para o maior.
                 x[j]++;
             }
@@ -64,7 +74,7 @@ int cont_menor(int *vet,int n){
     // Ordena em um vetor auxiliar.
     for(int i = 0; i < n; i++){
         b[x[i]] = vet[i];
-        contador_trocas++; // Movimentação no vetor(troca).
+        (quantidades->contadorTrocas)++; // Movimentação no vetor(troca).
     }
     // Copia para o vetor resposta.
     memcpy(vet, b, n*sizeof(int));
@@ -74,5 +84,5 @@ int cont_menor(int *vet,int n){
     b = NULL;
     x = NULL;
 
-    return contador_trocas;
+    return;
 }
