@@ -14,11 +14,18 @@ Exemplo:
 #include<stdlib.h>
 #include<time.h>
 
+typedef struct quantidades_ {
+    int contadorTrocas;
+    int contadorComparacoes;
+}QUANTIDADES;
+
 // Modularização.
-int selectionsort(int *vet, int n);
+void selectionsort(int *vet, int n,  QUANTIDADES *quant);
 
 int main(){
     int n, *vet;
+    QUANTIDADES quant;
+    quant.contadorComparacoes = quant.contadorTrocas = 0;
     scanf("%d", &n);
     vet = (int*) malloc(n*sizeof(int));
     for(int i = 0; i<n; i++){
@@ -30,7 +37,7 @@ int main(){
 
     start = clock();
 
-    int trocas = selectionsort(vet, n);
+    selectionsort(vet, n, &quant);
 
     end = clock();
     
@@ -43,7 +50,9 @@ int main(){
 
     printf("\nTempo de execução: %lf ms\n", cpu_time_ms);
 
-    printf("\n Foram realizadas %d trocas.\n", trocas);
+    printf("\n Foram realizadas %d trocas e %d comparações.\n", 
+                quant.contadorTrocas, quant.contadorComparacoes);
+
 
     free(vet);
     vet = NULL; // Boa prática.
@@ -51,11 +60,12 @@ int main(){
     return 0;
 }
 
-int selectionsort(int *vet, int n){
-    int trocas = 0; // Guarda quantidade de trocas.
+void selectionsort(int *vet, int n, QUANTIDADES *quant){
+     // Guarda quantidade de trocas.
     for(int i = 0; i < n-1; i++){
         int menor = i; // Inicio do vetor nao ordenado.
         for(int j = i+1; j < n; j++){
+            (*quant).contadorComparacoes++;
             if(vet[j] < vet[menor]){
                 menor = j; // Salva onde esta o menor valor.
             }
@@ -65,7 +75,7 @@ int selectionsort(int *vet, int n){
             int aux = vet[i];
             vet[i] = vet[menor];
             vet[menor] = aux;
-            trocas++;
+            (*quant).contadorTrocas++;
         }
     }
 }

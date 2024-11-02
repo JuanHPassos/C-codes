@@ -2,11 +2,19 @@
 #include<stdlib.h>
 #include<time.h>
 
-void merge(int *vet, int l, int meio, int r, int *contador);
-void mergesort(int *vet, int l, int r, int *contador);
+typedef struct quantidades_ {
+    int contadorTrocas;
+    int contadorComparacoes;
+}QUANTIDADES;
+
+void merge(int *vet, int l, int meio, int r, QUANTIDADES *contador);
+void mergesort(int *vet, int l, int r, QUANTIDADES *contador);
 
 int main(){
-    int n, *vet = NULL, contador = 0;
+    int n, *vet = NULL;
+    QUANTIDADES contador;
+    contador.contadorComparacoes = contador.contadorTrocas = 0;
+
     scanf("%d", &n);
 
     vet = (int *) malloc(sizeof(int)*n);
@@ -38,7 +46,8 @@ int main(){
 
     printf("\nTempo de execução: %lf ms\n", cpu_time_ms);
 
-    printf("\n Foram realizadas %d trocas.\n", contador);
+    printf("\n Foram realizadas %d trocas e %d comparações.\n", 
+                contador.contadorTrocas, contador.contadorComparacoes);
 
     free(vet);
     vet = NULL;
@@ -46,7 +55,7 @@ int main(){
     return 0;
 }
 
-void mergesort(int *vet, int l, int r, int *contador){
+void mergesort(int *vet, int l, int r, QUANTIDADES *contador){
     if(l<r){
         int meio = (l+r)/2;
 
@@ -58,7 +67,7 @@ void mergesort(int *vet, int l, int r, int *contador){
     }
 }
 
-void merge(int *vet, int l, int meio, int r, int *contador){
+void merge(int *vet, int l, int meio, int r, QUANTIDADES *contador){
     int tam1 = meio-l+1;
     int tam2 = r-meio;
 
@@ -76,6 +85,7 @@ void merge(int *vet, int l, int meio, int r, int *contador){
     int posL = 0, posR = 0, posVet = l;
 
     while(posL < tam1 && posR < tam2){
+        (*contador).contadorComparacoes++;
         if(L[posL] <= R[posR]){
             vet[posVet] = L[posL];
             posL++;
@@ -83,7 +93,7 @@ void merge(int *vet, int l, int meio, int r, int *contador){
         else{
             vet[posVet] = R[posR];
             posR++;
-            (*contador)++;
+            (*contador).contadorTrocas++;
         }
         posVet++;
     }

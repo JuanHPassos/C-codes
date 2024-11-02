@@ -4,11 +4,17 @@
 #include<stdlib.h>
 #include<time.h>
 
+typedef struct quantidades_ {
+    int contadorTrocas;
+    int contadorComparacoes;
+}QUANTIDADES;
+
 // Modularização.
-int inserctionsort(int *vet, int n);
+QUANTIDADES inserctionsort(int *vet, int n);
 
 int main(){
     int n, *vet;
+    QUANTIDADES quant;
     scanf("%d", &n);
     vet = (int*) malloc(n*sizeof(int));
     for(int i = 0; i < n; i++){
@@ -20,7 +26,7 @@ int main(){
 
     start = clock();
 
-    int trocas = inserctionsort(vet, n);
+    quant = inserctionsort(vet, n);
 
     end = clock();
 
@@ -33,7 +39,8 @@ int main(){
 
     printf("\nTempo de execução: %lf ms\n", cpu_time_ms);
 
-    printf("\n Foram realizadas %d trocas.\n", trocas);
+    printf("\n Foram realizadas %d trocas e %d comparações.\n", 
+                quant.contadorTrocas, quant.contadorComparacoes);
 
     free(vet);
     vet = NULL; // Boa prática.
@@ -42,22 +49,27 @@ int main(){
 
 }
 // Retorna o numero de trocas
-int inserctionsort(int *vet, int n){
-    int trocas = 0;
+QUANTIDADES inserctionsort(int *vet, int n){
+    QUANTIDADES quant;
+    quant.contadorComparacoes = quant.contadorTrocas = 0;
+
     // Ordenar todos os numeros na janela.
     for(int i = 1; i < n; i++){
         // Valor a ser inserido no subvetor ordenado.
         int insercao = vet[i];
         int j = i-1; // Ultimo elemento do subvetor ordenado.
         // Procurar posicao, utilizando swap entre os numeros.
+        quant.contadorComparacoes++;
         while(j >= 0 && vet[j] > insercao){
+            quant.contadorComparacoes++;
             vet[j+1] = vet[j];
             j = j - 1;
-            trocas++;
+            quant.contadorTrocas++;
         }
         // Posicao que foi aberta para insercao.
         vet[j+1] = insercao;
     }
-    return trocas;
+    return quant;
 }
+
 
