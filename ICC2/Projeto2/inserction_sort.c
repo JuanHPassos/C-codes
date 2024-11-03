@@ -5,8 +5,8 @@
 #include<time.h>
 
 typedef struct quantidades_ {
-    int contadorTrocas;
-    int contadorComparacoes;
+    long long int contadorTrocas;
+    long long int contadorComparacoes;
 }QUANTIDADES;
 
 // Modularização.
@@ -39,7 +39,7 @@ int main(){
 
     printf("\nTempo de execução: %lf ms\n", cpu_time_ms);
 
-    printf("\n Foram realizadas %d trocas e %d comparações.\n", 
+    printf("\n Foram realizadas %lld trocas e %lld comparações.\n", 
                 quant.contadorTrocas, quant.contadorComparacoes);
 
     free(vet);

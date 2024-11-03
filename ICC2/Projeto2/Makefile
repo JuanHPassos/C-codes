@@ -1,11 +1,11 @@
 CC = gcc
 CFLAGS = -std=c99 -Wall
-TARGET = bubble_sort
+TARGET = inserction_sort
 
 all: $(TARGET)
 
-$(TARGET): bubble_sort.c
-	$(CC) $(CFLAGS) bubble_sort.c -o $(TARGET)
+$(TARGET): inserction_sort.c
+	$(CC) $(CFLAGS) inserction_sort.c -o $(TARGET)
 
 clean:
 	rm -f $(TARGET)
