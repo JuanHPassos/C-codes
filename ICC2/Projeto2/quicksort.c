@@ -94,6 +94,7 @@ void quicksort(int *vet,int l,int r, QUANTIDADES *contador){
 
     }
 }
+
 // Encontra o pivo.
 int mediana(int a, int b, int c) {
     if ((a > b) == (a < c)) {

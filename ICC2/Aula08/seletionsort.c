@@ -39,6 +39,7 @@ void selectionsort(int *vet, int n){
     for(int i = 0; i < n-1; i++){
         int menor = i; // Inicio do vetor nao ordenado.
         for(int j = i+1; j < n; j++){
+            // Implementação estável.
             if(vet[j] < vet[menor]){
                 menor = j; // Salva onde esta o menor valor.
             }

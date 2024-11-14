@@ -29,6 +29,7 @@ void cont_menor(int *vet,int n){
     int x[n], b[n]; // x vetor quant_menores
     memset(x, 0, n*sizeof(int));
     // Conta elementos menores
+    // Comparando todos os pares de elementos do vetor.
     for(int i = 0; i < n-1; i++){
         for(int j = i+1; j < n; j++){
             if(vet[i] <= vet[j]){ // Para decrescente basta, trocar o menor para o maior.

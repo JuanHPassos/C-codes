@@ -58,7 +58,8 @@ void conquistar(int *vet, int l, int meio, int r){
     int posL = 0, posR = 0, posVet = l;
 
     while(posL < tam1 && posR < tam2){
-        if(L[posL] < R[posR]){
+        // Método de implementação estável.
+        if(L[posL] <= R[posR]){
             vet[posVet] = L[posL];
             posL++;
         }

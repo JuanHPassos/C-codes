@@ -5,7 +5,7 @@ T(n) = aT($\frac{n}{b}$) + O($n^d$)
 
 Sendo:
  - `a` representa o número de subproblemas gerados na divisão(filhos).
- - `b` indica o fator de reduçãi do problema(por quanto o tamanho do problema é dividido).
+ - `b` indica o fator de redução do problema(por quanto o tamanho do problema é dividido).
  - $n^d$  é o custo da combinação das soluções dos subproblemas(o termo não-recursivo).
   
 O método mestre divide a análise em três casos, comparando o crescimento da parte recursiva T(n) com o custo da parte não-recursiva O($n^d$):
